@@ -12,8 +12,8 @@ const Constants: IGameConstants = {
     width: 835,
     height: 835,
     delta: 100,
+    velocity: 500,
   },
-  shooterVelocity: 500,
   bullet: {
     name: 'covidBeam',
     path: '/src/assets/images/beam.png',
@@ -28,6 +28,12 @@ const Constants: IGameConstants = {
     animName: 'corona_rotation',
     width: 96,
     height: 100,
+  },
+  covidBalls: {
+    L3: {
+      min: 0,
+      max: 10,
+    },
   },
 };
 
