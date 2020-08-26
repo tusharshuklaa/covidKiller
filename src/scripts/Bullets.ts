@@ -1,0 +1,32 @@
+import GameScene from './GameScene';
+import VaccineLaser from './VaccineLaser';
+import GameConsts from './Constants';
+
+/**
+ *
+ *
+ * @export
+ * @class Bullets
+ * @extends {Phaser.Physics.Arcade.Group}
+ */
+export default class Bullets extends Phaser.Physics.Arcade.Group {
+  constructor(scene: GameScene) {
+    super(scene.physics.world, scene);
+
+    this.createMultiple({
+      classType: VaccineLaser,
+      frameQuantity: 50,
+      active: false,
+      visible: false,
+      key: (GameConsts.bullet! as IGameObjectInfo).name,
+    });
+  }
+
+  shoot(x: number, y: number): void {
+    const bullet = this.getFirstDead(false)! as VaccineLaser;
+
+    if (bullet) {
+      bullet.fire(x, y);
+    }
+  }
+}

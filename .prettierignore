@@ -1,0 +1,18 @@
+# Web workbench (sass)
+.sass-cache/
+
+# Visual Studio cache files
+# files ending in .cache can be ignored
+*.[Cc]ache
+# but keep track of directories ending in .cache
+!?*.[Cc]ache/
+
+# Node.js Tools for Visual Studio
+.ntvs_analysis.dat
+node_modules/
+
+# Local History for Visual Studio
+.localhistory/
+
+# Compiles JS files
+*.js
