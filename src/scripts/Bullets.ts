@@ -3,9 +3,8 @@ import VaccineLaser from './VaccineLaser';
 import GameConsts from './Constants';
 
 /**
+ * Group of 'VaccineLaser' aka bullet/beam
  *
- *
- * @export
  * @class Bullets
  * @extends {Phaser.Physics.Arcade.Group}
  */

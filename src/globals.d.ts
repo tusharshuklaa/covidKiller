@@ -20,7 +20,18 @@ declare global {
     delta?: number;
   }
 
+  interface ICovidBallConfig {
+    min: number;
+    max: number;
+  }
+
+  interface ICovidBallsConfig {
+    L1?: ICovidBallConfig;
+    L2?: ICovidBallConfig;
+    L3?: ICovidBallConfig;
+  }
+
   interface IGameConstants {
-    readonly [propName: string]: string | number | IGameObjectInfo;
+    readonly [propName: string]: string | number | IGameObjectInfo | ICovidBallsConfig;
   }
 }

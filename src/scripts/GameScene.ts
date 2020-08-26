@@ -1,6 +1,6 @@
 import 'phaser';
 import Shooter from './Shooter';
-import CoronaL3 from './CoronaL3';
+import CovidBalls from './CovidBalls';
 import GameConsts from './Constants';
 import { getScreenMidPoint } from './Utils';
 
@@ -8,7 +8,7 @@ export default class GameScene extends Phaser.Scene {
   bgImage!: Phaser.GameObjects.TileSprite;
   shooter!: Shooter;
   cursorKeys!: Phaser.Types.Input.Keyboard.CursorKeys;
-  coronaL3!: CoronaL3;
+  covidBalls!: CovidBalls;
 
   constructor() {
     // The name of this scene is passed as an argument to super
@@ -25,6 +25,57 @@ export default class GameScene extends Phaser.Scene {
    * @memberof GameScene
    */
   preload(): void {
+    this.loadFonts();
+    this.loadSpriteSheets();
+  }
+
+  /**
+   * This function is called once and is used to create assets and create game objects
+   *
+   * @memberof GameScene
+   */
+  create(): void {
+    const midPoint = getScreenMidPoint()!;
+    this.setBgImage(midPoint);
+    this.shooter = new Shooter(this, midPoint.width);
+    this.covidBalls = new CovidBalls(this);
+  }
+
+  /**
+   * This function runs on evey game frame and updates the scene regularly
+   *
+   * @memberof GameScene
+   */
+  update(): void {
+    this.shooter.move();
+    this.shooter.enableShooting();
+
+    if (this.bgImage) {
+      this.bgImage.tilePositionX -= 0.5;
+    }
+  }
+
+  // #endregion
+
+  // #region Custom methods
+
+  loadFonts(): void {
+    this.load.bitmapFont(
+      'shortStack',
+      '/src/assets/fonts/shortStack.png',
+      'src/assets/fonts/shortStack.xml',
+    );
+
+    this.load.bitmapFont('gothic', '/src/assets/fonts/gothic.png', 'src/assets/fonts/gothic.xml');
+
+    this.load.bitmapFont(
+      'atariSmooth',
+      '/src/assets/fonts/atari-smooth.png',
+      'src/assets/fonts/atari-smooth.xml',
+    );
+  }
+
+  loadSpriteSheets(): void {
     const bgImg = GameConsts.bgImg as IGameObjectInfo;
     const shooter = GameConsts.shooter as IGameObjectInfo;
     const bullet = GameConsts.bullet as IGameObjectInfo;
@@ -49,44 +100,15 @@ export default class GameScene extends Phaser.Scene {
   }
 
   /**
-   * This function is called once and is used to create assets and create game objects
+   * Sets background image for the game scene
    *
+   * @param {IBox} midPoint
    * @memberof GameScene
    */
-  create(): void {
-    const midPoint = getScreenMidPoint()!;
-    this.setBgImage(midPoint);
-    this.shooter = new Shooter(this, midPoint.width);
-    this.coronaL3 = new CoronaL3(this);
-  }
-
-  /**
-   * This function runs on evey game frame and updates the scene regularly
-   *
-   * @memberof GameScene
-   */
-  update(): void {
-    this.shooter.move();
-    this.shooter.enableShooting();
-    this.initVirusBalls();
-
-    if (this.bgImage) {
-      this.bgImage.tilePositionX -= 0.5;
-    }
-  }
-
-  // #endregion
-
-  // #region Custom methods
-
   setBgImage(midPoint: IBox): void {
     this.bgImage = this.add
       .tileSprite(0, midPoint.height, 0, 0, (GameConsts.bgImg as IGameObjectInfo).name)
       .setScale(1.26);
-  }
-
-  initVirusBalls(): void {
-    this.coronaL3.rotate();
   }
 
   // #endregion

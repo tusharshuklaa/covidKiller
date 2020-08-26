@@ -41,13 +41,14 @@ export default class Shooter extends Phaser.Physics.Arcade.Sprite {
   }
 
   move(): void {
+    const _shooterVelocity = (GameConsts.shooter as IGameObjectInfo).velocity!;
     this.setVelocity(0);
     if (this.cursorKeys?.left?.isDown) {
-      this.setVelocityX(-GameConsts.shooterVelocity);
+      this.setVelocityX(-_shooterVelocity);
     }
 
     if (this.cursorKeys?.right?.isDown) {
-      this.setVelocityX(+GameConsts.shooterVelocity);
+      this.setVelocityX(+_shooterVelocity);
     }
   }
 
