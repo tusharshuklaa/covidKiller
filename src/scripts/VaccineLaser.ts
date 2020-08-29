@@ -1,18 +1,18 @@
 import GameScene from './GameScene';
-import GameConsts from './Constants';
+import GameConfig from './Constants';
 
 export default class VaccineLaser extends Phaser.Physics.Arcade.Sprite {
   constructor(scene: GameScene, x: number, y: number) {
-    super(scene, x, y, (GameConsts.bullet! as IGameObjectInfo).name);
+    super(scene, x, y, GameConfig.bullet.name);
   }
 
   fire(x: number, y: number): void {
     this.body.reset(x, y);
     this.scale = 2;
-    this.play((GameConsts.bullet as IGameObjectInfo).animName!);
+    this.play(GameConfig.bullet.animName!);
     this.setActive(true);
     this.setVisible(true);
-    this.setVelocityY(-(GameConsts.bullet as IGameObjectInfo).velocity!);
+    this.setVelocityY(-GameConfig.bullet.velocity!);
   }
 
   /**

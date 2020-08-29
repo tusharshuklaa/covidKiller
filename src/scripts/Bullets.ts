@@ -1,6 +1,6 @@
 import GameScene from './GameScene';
 import VaccineLaser from './VaccineLaser';
-import GameConsts from './Constants';
+import GameConfig from './Constants';
 
 /**
  * Group of 'VaccineLaser' aka bullet/beam
@@ -17,7 +17,7 @@ export default class Bullets extends Phaser.Physics.Arcade.Group {
       frameQuantity: 50,
       active: false,
       visible: false,
-      key: (GameConsts.bullet! as IGameObjectInfo).name,
+      key: GameConfig.bullet.name,
     });
   }
 
@@ -27,5 +27,9 @@ export default class Bullets extends Phaser.Physics.Arcade.Group {
     if (bullet) {
       bullet.fire(x, y);
     }
+  }
+
+  vanish(bullet: VaccineLaser): void {
+    bullet.setActive(false).setVisible(false);
   }
 }
