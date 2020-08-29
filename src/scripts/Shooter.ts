@@ -1,19 +1,22 @@
 import GameScene from './GameScene';
-import GameConsts from './Constants';
+import GameConfig from './Constants';
 import Bullets from './Bullets';
 import { enablePhysicsInSprite } from './Utils';
+import CovidBall from './CovidBall';
+import VaccineLaser from './VaccineLaser';
 
 export default class Shooter extends Phaser.Physics.Arcade.Sprite {
   private cursorKeys: Phaser.Types.Input.Keyboard.CursorKeys;
   private pauseFiring: boolean;
   private bullets!: Bullets;
+  // private allowBulletCollision: boolean;
 
   constructor(scene: GameScene, x: number) {
     // Make the height of shooter 1/10th of game screen height OR 100px (whichever is higher)
     const shooterHeight = Math.max((window.__COVID_GAME__.config.height as number) / 10, 100);
     const shooterTopOffset = (window.__COVID_GAME__.config.height as number) - shooterHeight / 1.5;
 
-    super(scene, x, shooterTopOffset, (GameConsts.shooter! as IGameObjectInfo).name);
+    super(scene, x, shooterTopOffset, GameConfig.shooter.name);
 
     enablePhysicsInSprite(scene, this);
 
@@ -32,6 +35,8 @@ export default class Shooter extends Phaser.Physics.Arcade.Sprite {
     this.bullets = new Bullets(scene);
 
     this.pauseFiring = false;
+
+    this.hitCovidBalls(1);
   }
 
   private enableKeyboardMovement(): void {
@@ -40,8 +45,28 @@ export default class Shooter extends Phaser.Physics.Arcade.Sprite {
     });
   }
 
+  hitCovidBalls(count: number): void {
+    const scene = this.scene as GameScene;
+    // Collide bullets with covid balls
+    if (scene.covidBalls) {
+      scene.physics.add.collider(this.bullets, scene.covidBalls, (b, cb) => {
+        this.bullets.vanish(b as VaccineLaser);
+        scene.covidBalls.getWeaker(cb as CovidBall);
+        b.active = false;
+      });
+    } else {
+      // Little hack to re-check existence of covidBalls in scene due to rare race condition
+      if (count < 5) {
+        count++;
+        setTimeout(() => {
+          this.hitCovidBalls(count);
+        }, 0);
+      }
+    }
+  }
+
   move(): void {
-    const _shooterVelocity = (GameConsts.shooter as IGameObjectInfo).velocity!;
+    const _shooterVelocity = GameConfig.shooter.velocity!;
     this.setVelocity(0);
     if (this.cursorKeys?.left?.isDown) {
       this.setVelocityX(-_shooterVelocity);
@@ -63,7 +88,7 @@ export default class Shooter extends Phaser.Physics.Arcade.Sprite {
       // Firing less bullets in continuous fire by causing a delay
       setTimeout(() => {
         this.pauseFiring = false;
-      }, 100);
+      }, GameConfig.shooter.delta!);
     }
   }
 
@@ -72,7 +97,7 @@ export default class Shooter extends Phaser.Physics.Arcade.Sprite {
   }
 
   createBulletAnimation(): void {
-    const beam = GameConsts.bullet as IGameObjectInfo;
+    const beam = GameConfig.bullet;
 
     this.scene.anims.create({
       key: beam.animName,

@@ -10,19 +10,22 @@ declare global {
     height: number;
   }
 
-  interface IGameObjectInfo {
+  interface IAsset {
     name: string;
     path: string;
+  }
+
+  interface IGameObjectInfo extends IBox, IAsset {
     animName?: string;
     velocity?: number;
-    width?: number;
-    height?: number;
     delta?: number;
   }
 
-  interface ICovidBallConfig {
+  interface ICovidBallConfig extends IGameObjectInfo {
     min: number;
     max: number;
+    health: number;
+    scale: number;
   }
 
   interface ICovidBallsConfig {
@@ -31,7 +34,28 @@ declare global {
     L3?: ICovidBallConfig;
   }
 
+  type CovidBallType = 'L1' | 'L2' | 'L3';
+
+  interface IBitmapFontConfig {
+    name: string;
+    png: string;
+    xml: string;
+  }
+
+  interface IBitmapFonts {
+    primary: IBitmapFontConfig;
+    secondary?: IBitmapFontConfig;
+    tertiary?: IBitmapFontConfig;
+  }
+
   interface IGameConstants {
-    readonly [propName: string]: string | number | IGameObjectInfo | ICovidBallsConfig;
+    readonly title: string;
+    readonly gameContainer: string;
+    readonly gameSceneName: string;
+    readonly bgImg: IAsset;
+    readonly shooter: IGameObjectInfo;
+    readonly bullet: IGameObjectInfo;
+    readonly covidBalls: ICovidBallsConfig;
+    readonly bitMap: IBitmapFonts;
   }
 }

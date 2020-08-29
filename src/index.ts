@@ -1,6 +1,6 @@
 import 'phaser';
 import './styles/style.scss';
-import GameConsts from './scripts/Constants';
+import GameConfig from './scripts/Constants';
 import GameScene from './scripts/GameScene';
 import { getWindowHeight, getWindowWidth } from './scripts/Utils';
 
@@ -14,17 +14,17 @@ window.onload = () => {
   const winWidth = getWindowWidth();
   const gameWidth = winWidth < 768 ? winWidth : Math.min(600, winWidth / 3);
   const config: Phaser.Types.Core.GameConfig = {
-    title: GameConsts.title as string,
+    title: GameConfig.title,
     width: gameWidth,
     height: getWindowHeight() * 0.9,
-    parent: GameConsts.gameContainer as string,
+    parent: GameConfig.gameContainer,
     scene: [GameScene],
     physics: {
       default: 'arcade',
       arcade: {
         debug: false,
         gravity: {
-          y: 180,
+          y: 150,
         },
       },
     },
